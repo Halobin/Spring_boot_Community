@@ -2,6 +2,7 @@ package com.halobin.community.controller;
 
 import com.halobin.community.dao.DiscussPostMapper;
 import com.halobin.community.entity.DiscussPost;
+import com.halobin.community.entity.Page;
 import com.halobin.community.entity.User;
 import com.halobin.community.service.DiscussPostService;
 import com.halobin.community.service.UserService;
@@ -25,8 +26,11 @@ public class MainPageController {
     private DiscussPostService discussPostService;
 
     @RequestMapping("/index")
-    public String getIndexPage(Model model){
-        List<DiscussPost> discussPostList = discussPostService.findDiscussPosts(0,0,10);
+    public String getIndexPage(Model model, Page page){
+        page.setCount(discussPostService.getDiscussPostCount(0));
+        page.setPath("/index");
+
+        List<DiscussPost> discussPostList = discussPostService.findDiscussPosts(0,page.getOffset(),page.getLimit());
         List<Map<String, Object>> discussPostsMap = new ArrayList<>();
         for(DiscussPost discussPost : discussPostList){
             Map<String, Object> map = new HashMap<>();

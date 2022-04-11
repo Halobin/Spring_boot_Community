@@ -17,7 +17,7 @@
     </select>
 
     <!--int selectDiscussPostCount(@Param("userId") int userId);-->
-    <select id="selectDiscussPostCount" >
+    <select id="selectDiscussPostCount" resultType="int">
         SELECT count(*)
         FROM discuss_post
         WHERE status != 2

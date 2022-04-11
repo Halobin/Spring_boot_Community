@@ -29,5 +29,7 @@ class CommunityApplicationTests {
 
         User user = userService.findUserById(101);
         System.out.println(user);
+
+        System.out.println(discussPostService.getDiscussPostCount(0));
     }
 }
