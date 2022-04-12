@@ -124,12 +124,12 @@
 						</a>
 						<div class="media-body">
 							<h6 class="mt-0 mb-3">
-								<a href="#" th:text="${discussPost.post.title}">备战春招，面试刷题跟他复习，一个月全搞定！</a>
+								<a href="#" th:utext="${discussPost.post.title}">备战春招，面试刷题跟他复习，一个月全搞定！</a>
 								<span class="badge badge-secondary bg-primary" th:if="${discussPost.post.type == 1}">置顶</span>
 								<span class="badge badge-secondary bg-danger" th:if="${discussPost.post.status == 1}">精华</span>
 							</h6>
 							<div class="text-muted font-size-12">
-								<u class="mr-3" th:text="${discussPost.user.username}">寒江雪</u> 发布于 <b th:text="${#dates.format(discussPost.post.createTime, 'yyyy-mm-dd hh:mm:ss')}">2019-04-15 15:32:18</b>
+								<u class="mr-3" th:utext="${discussPost.user.username}">寒江雪</u> 发布于 <b th:text="${#dates.format(discussPost.post.createTime, 'yyyy-mm-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
 								<ul class="d-inline float-right">
 									<li class="d-inline ml-2">赞 11</li>
 									<li class="d-inline ml-2">|</li>
