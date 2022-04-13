@@ -11,4 +11,23 @@
         WHERE id = #{userId}
     </select>
 
+    <!--User findUserByUsername(@Param("username") String username);-->
+    <select id="findUserByUsername" resultType="User">
+        SELECT *
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <!--User findUserByEmail(@Param("email") String email);-->
+    <select id="findUserByEmail" resultType="User">
+        SELECT *
+        FROM user
+        WHERE email = #{email}
+    </select>
+
+    <!--int insertUser(User user);-->
+    <insert id="insertUser" parameterType="User" keyProperty="id">
+        INSERT INTO user (username, password, salt, email, type, status, activation_code, header_url, create_time)
+        values(#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})
+    </insert>
 </mapper>
