@@ -30,4 +30,11 @@
         INSERT INTO user (username, password, salt, email, type, status, activation_code, header_url, create_time)
         values(#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})
     </insert>
+
+    <!--int updateStatusById(int userId, int status);-->
+    <update id="updateStatusById">
+        UPDATE user
+        SET status = #{status}
+        WHERE id = #{userId};
+    </update>
 </mapper>

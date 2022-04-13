@@ -2,6 +2,7 @@ package com.halobin.community.service;
 
 import com.halobin.community.dao.UserMapper;
 import com.halobin.community.entity.User;
+import com.halobin.community.util.CommunityConstant;
 import com.halobin.community.util.CommunityUtil;
 import com.halobin.community.util.MailClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.Random;
 
 @Service
-public class UserService {
+public class UserService implements CommunityConstant {
 
     @Autowired
     private UserMapper userMapper;
@@ -49,6 +50,9 @@ public class UserService {
         return userMapper.insertUser(user);
     }
 
+    public int updateStatusById(int userId, int status){
+        return userMapper.updateStatusById(userId, status);
+    }
     /**
      * 用户注册
      *
@@ -89,5 +93,15 @@ public class UserService {
         return map;
     }
 
-
+    public int activation(int userId, String code){
+        User user = userMapper.findUserById(userId);
+        if(user.getStatus() == 1){
+            return ACTIVATION_REPEAT;
+        }else if(user.getStatus() == 0 && user.getActivationCode().equals(code)){
+            userMapper.updateStatusById(userId, 1);
+            return ACTIVATION_SUCCESS;
+        }else{
+            return ACTIVATION_FAILURE;
+        }
+    }
 }

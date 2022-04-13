@@ -37,15 +37,7 @@ class CommunityApplicationTests {
 //        user.setId(555);
 //        user.setUsername("halobininsert");
 //        user.setEmail("halobininsert@163.com");
-        User user = new User();
-        user.setUsername("test");
-        user.setPassword("test");
-        user.setSalt("1111");
-        user.setEmail("test@qq.com");
-        user.setHeaderUrl("http://images.nowcoder.com/head/149t.png");
-        user.setCreateTime(new Date());
-        int i = userService.insertUser(user);
-        System.out.println(user.getId());
+        userService.updateStatusById(667,1);
 //        System.out.println(discussPostService.getDiscussPostCount(0));
     }
 

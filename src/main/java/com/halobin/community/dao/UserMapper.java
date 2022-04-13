@@ -14,4 +14,6 @@ public interface UserMapper {
     User findUserByEmail(@Param("email") String email);
 
     int insertUser(User user);
+
+    int updateStatusById(int userId, int status);
 }
