@@ -21,6 +21,11 @@ public class LoginController {
         return "/site/register";
     }
 
+    @GetMapping("/login")
+    public String getLoginPage(){
+        return "/site/login";
+    }
+
     @PostMapping("/register")
     public String registerUser(Model model, User user){
         Map<String, Object> map = userService.registerUser(user);

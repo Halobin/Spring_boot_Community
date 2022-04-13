@@ -49,6 +49,12 @@ public class UserService {
         return userMapper.insertUser(user);
     }
 
+    /**
+     * 用户注册
+     *
+     * @param user
+     * @return
+     */
     public Map<String, Object> registerUser(User user){
         Map<String, Object> map = new HashMap<>();
         User u = userMapper.findUserByUsername(user.getUsername());
@@ -82,4 +88,6 @@ public class UserService {
 
         return map;
     }
+
+
 }
