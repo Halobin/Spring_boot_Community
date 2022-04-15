@@ -28,6 +28,13 @@ public class LoginController implements CommunityConstant {
         return "/site/login";
     }
 
+    /**
+     * 注册
+     *
+     * @param model
+     * @param user
+     * @return
+     */
     @PostMapping("/register")
     public String registerUser(Model model, User user){
         Map<String, Object> map = userService.registerUser(user);
@@ -42,6 +49,14 @@ public class LoginController implements CommunityConstant {
         }
     }
 
+    /**
+     * 账号激活
+     *
+     * @param model
+     * @param userId
+     * @param code
+     * @return
+     */
     @GetMapping("/activation/{userId}/{code}")
     public String activation(Model model, @PathVariable("userId") int userId, @PathVariable("code") String code){
         int res = userService.activation(userId, code);
