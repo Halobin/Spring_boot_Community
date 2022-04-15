@@ -179,6 +179,10 @@ public class UserService implements CommunityConstant {
      * @param ticket
      */
     public void userLogout(String ticket){
-        loginTicketMapper.updateStatusByTicket(ticket, 0);
+        loginTicketMapper.updateStatusByTicket(ticket, 1);
+    }
+
+    public LoginTicket findLoginTicketByTicket(String ticket){
+        return loginTicketMapper.findLoginTicketByTicket(ticket);
     }
 }
