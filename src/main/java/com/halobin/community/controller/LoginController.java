@@ -1,5 +1,6 @@
 package com.halobin.community.controller;
 
+import com.google.code.kaptcha.Producer;
 import com.halobin.community.entity.User;
 import com.halobin.community.service.UserService;
 import com.halobin.community.util.CommunityConstant;
@@ -10,6 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.xml.soap.Text;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 @Controller
@@ -17,6 +27,9 @@ public class LoginController implements CommunityConstant {
 
     @Autowired
     private  UserService userService;
+
+    @Autowired
+    private Producer kaptchaProducer;
 
     @GetMapping("/register")
     public String getRegisterPage(){
@@ -72,6 +85,36 @@ public class LoginController implements CommunityConstant {
             model.addAttribute("msg", "无效操作，您的账号已经激活！");
             model.addAttribute("target", "/index");
             return "/site/operate-result";
+        }
+    }
+
+    @GetMapping("/kaptcha")
+    public void getKaptcha(HttpServletResponse response, HttpSession session){
+        //生成验证码
+        String text = kaptchaProducer.createText();
+        BufferedImage image = kaptchaProducer.createImage(text);
+
+        //验证码存入session
+        session.setAttribute("kaptcha", text);
+
+        response.setContentType("image/png");
+        try {
+            OutputStream os = response.getOutputStream();
+            ImageIO.write(image, "png", os);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/img")
+    public void getImg(HttpServletResponse response, HttpSession session){
+        response.setContentType("image/png");
+        try {
+            BufferedImage image = ImageIO.read(Files.newInputStream(Paths.get("C:\\Users\\Halobin\\Desktop\\svm.jpg")));
+            OutputStream os = response.getOutputStream();
+            ImageIO.write(image, "png", os);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
