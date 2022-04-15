@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.halobin.community.dao.LoginTicketMapper">
+
+    <!--LoginTicket findLoginTicketByTicket(@Param("ticket") String ticket);-->
+    <select id="findLoginTicketByTicket" resultType="LoginTicket">
+        SELECT *
+        FROM login_ticket
+        WHERE ticket = #{ticket}
+    </select>
+
+    <!--int insertLoginTicket(LoginTicket loginTicket);-->
+    <insert id="insertLoginTicket" parameterType="loginTicket" keyProperty="id">
+        INSERT INTO login_ticket (user_id, ticket, status, expired)
+        values(#{userId}, #{ticket}, #{status}, #{expired})
+    </insert>
+
+    <!--int updateStatusByTicket(String ticket, int status);-->
+    <update id="updateStatusByTicket">
+        UPDATE login_ticket
+        SET status = #{status}
+        WHERE ticket = #{ticket};
+    </update>
+</mapper>

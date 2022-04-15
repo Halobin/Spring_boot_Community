@@ -16,4 +16,14 @@ public interface CommunityConstant {
      * 重复激活
      */
     int ACTIVATION_REPEAT = 2;
+
+    /**
+     * 默认状态下登录凭证有效时间
+     */
+    long DEFAULT_EXPIRED_SECONDS = 3600 * 12;
+
+    /**
+     * 记住状态下登录配置有效时间
+     */
+    long REMEMBER_EXPIRED_SECONDS = 3600 * 24 * 5;
 }

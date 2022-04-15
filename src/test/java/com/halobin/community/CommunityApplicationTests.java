@@ -1,10 +1,13 @@
 package com.halobin.community;
 
 import com.halobin.community.dao.DiscussPostMapper;
+import com.halobin.community.dao.LoginTicketMapper;
 import com.halobin.community.entity.DiscussPost;
+import com.halobin.community.entity.LoginTicket;
 import com.halobin.community.entity.User;
 import com.halobin.community.service.DiscussPostService;
 import com.halobin.community.service.UserService;
+import com.halobin.community.util.CommunityUtil;
 import com.halobin.community.util.MailClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +28,21 @@ class CommunityApplicationTests {
     @Autowired
     private MailClient mailClient;
 
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
+
     @Test
     void testMapper(){
-//        List<DiscussPost> discussPostList = discussPostService.findDiscussPosts(0,0,10);
-//        for(DiscussPost discussPost : discussPostList){
-//            System.out.println(discussPost);
-//        }
 
-//        User user = userService.findUserByEmail("nowcoder149@sina.com");
-////        System.out.println(user);
-//        user.setId(555);
-//        user.setUsername("halobininsert");
-//        user.setEmail("halobininsert@163.com");
-        userService.updateStatusById(667,1);
-//        System.out.println(discussPostService.getDiscussPostCount(0));
+
+        LoginTicket loginTicket = loginTicketMapper.findLoginTicketByTicket("e9ac89c3712741e38b9d509df48a0b25");
+        System.out.println(loginTicket);
+
+        loginTicketMapper.updateStatusByTicket("e9ac89c3712741e38b9d509df48a0b25", 1);
+
+        loginTicket = loginTicketMapper.findLoginTicketByTicket("e9ac89c3712741e38b9d509df48a0b25");
+        System.out.println(loginTicket);
+
     }
 
     @Test
