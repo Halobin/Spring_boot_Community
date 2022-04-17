@@ -1,5 +1,6 @@
 package com.halobin.community.controller;
 
+import com.halobin.community.annotation.LoginRequired;
 import com.halobin.community.entity.User;
 import com.halobin.community.service.UserService;
 import com.halobin.community.util.CommunityUtil;
@@ -43,11 +44,13 @@ public class UserController {
     @Autowired
     private HostHolder hostHolder;
 
+    @LoginRequired
     @GetMapping("/setting")
     public String getSettingPage(){
         return "/site/setting";
     }
 
+    @LoginRequired
     @PostMapping("/upload")
     public String uploadHeaderUrl(MultipartFile uploadImag, Model model){
         if(uploadImag == null){
@@ -96,6 +99,7 @@ public class UserController {
 
     }
 
+    @LoginRequired
     @PostMapping("/setpassword")
     public String updatePassword(String oldPassword, String newPassword, String confirmPassword, Model model, HttpServletRequest request){
         if(StringUtils.isBlank(oldPassword)){
