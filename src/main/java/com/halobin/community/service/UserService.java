@@ -185,4 +185,16 @@ public class UserService implements CommunityConstant {
     public LoginTicket findLoginTicketByTicket(String ticket){
         return loginTicketMapper.findLoginTicketByTicket(ticket);
     }
+
+    public int updateHeaderUrlById(int userId, String headerUrl){
+        return userMapper.updateHeaderUrlById(userId, headerUrl);
+    }
+
+    public int updatePasswordById(int userId, String password){
+        return userMapper.updatePasswordById(userId, password);
+    }
+
+    public int updateLoginTicketStatusByTicket(String ticket, int status){
+        return loginTicketMapper.updateStatusByTicket(ticket, 1);
+    }
 }

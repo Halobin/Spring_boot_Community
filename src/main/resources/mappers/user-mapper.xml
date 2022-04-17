@@ -37,4 +37,19 @@
         SET status = #{status}
         WHERE id = #{userId};
     </update>
+
+    <!--int updateHeaderUrlById(int userId, String headerUrl);-->
+    <update id="updateHeaderUrlById">
+        UPDATE user
+        SET header_url = #{headerUrl}
+        WHERE id = #{userId};
+    </update>
+
+    <!--int updatePasswordById(int userId, String password);-->
+    <update id="updatePasswordById">
+        UPDATE user
+        SET password = #{password}
+        WHERE id = #{userId};
+    </update>
+
 </mapper>
