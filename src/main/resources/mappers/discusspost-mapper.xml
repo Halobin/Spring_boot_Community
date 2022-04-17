@@ -36,4 +36,10 @@
         values (#{userId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})
     </insert>
 
+    <!--DiscussPost selectDiscussPostById(int postId);-->
+    <select id="selectDiscussPostById" resultType="DiscussPost">
+        SELECT *
+        FROM discuss_post
+        WHERE id = #{postId}
+    </select>
 </mapper>
