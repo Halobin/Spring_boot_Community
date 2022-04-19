@@ -2,8 +2,10 @@ package com.halobin.community;
 
 import com.halobin.community.dao.CommentMapper;
 import com.halobin.community.dao.DiscussPostMapper;
+import com.halobin.community.dao.MessageMapper;
 import com.halobin.community.entity.Comment;
 import com.halobin.community.entity.DiscussPost;
+import com.halobin.community.entity.Message;
 import com.halobin.community.util.CommunityConstant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class MapperTest implements CommunityConstant {
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private MessageMapper messageMapper;
 
     @Test
     public void testDiscussPostMapper(){
@@ -38,5 +43,24 @@ public class MapperTest implements CommunityConstant {
         for(Comment comment:commentList){
             System.out.println(comment);
         }
+    }
+
+    @Test
+    public void testMessageMapper(){
+        List<Message> messageList = messageMapper.selectConversations(111, 0, Integer.MAX_VALUE);
+        for(Message mes : messageList){
+            System.out.println(mes);
+        }
+        int count = messageMapper.selectConversationCount(111);
+        System.out.println(count);
+
+        messageList = messageMapper.selectLetters("111_112",0, Integer.MAX_VALUE);
+        for(Message mes : messageList){
+            System.out.println(mes);
+        }
+        count = messageMapper.selectLetterCount("111_112");
+        System.out.println(count);
+
+        System.out.println(messageMapper.selectLetterUnreadCount(131,"111_131"));
     }
 }

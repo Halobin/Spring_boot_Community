@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.halobin.community.dao.MessageMapper">
+
+    <!--List<Message> selectConversations(int userId, int offset, int limit);-->
+    <select id="selectConversations" resultType="Message">
+        SELECT *
+        FROM message
+        WHERE id in (
+            SELECT max(id)
+            FROM message
+            WHERE status != 2
+            AND from_id != 1
+            AND (from_id = #{userId} OR to_id = #{userId})
+            GROUP BY conversation_id
+        )
+        ORDER BY id desc
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!--int selectConversationCount(int userId);-->
+    <select id="selectConversationCount" resultType="int">
+        SELECT count(*)
+        FROM message
+        WHERE id in (
+            SELECT max(id)
+            FROM message
+            WHERE status != 2
+            AND from_id != 1
+            AND (from_id = #{userId} OR to_id = #{userId})
+            GROUP BY conversation_id
+        )
+    </select>
+
+    <!--List<Message> selectLetters(String conversationId, int offset, int limit);-->
+    <select id="selectLetters" resultType="Message">
+        SELECT *
+        FROM message
+        WHERE status != 2
+        AND conversation_id = #{conversationId}
+        AND from_id != 1
+        ORDER BY id desc
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!--int selectLetterCount(String conversationId);-->
+    <select id="selectLetterCount" resultType="int">
+        SELECT count(*)
+        FROM message
+        WHERE status != 2
+        AND conversation_id = #{conversationId}
+        AND from_id != 1
+    </select>
+
+    <!--int selectLetterUnreadCount(int userId, String conversationId);-->
+    <select id="selectLetterUnreadCount" resultType="int">
+        SELECT count(*)
+        FROM message
+        WHERE status = 0
+        AND from_id != 1
+        AND to_id = #{userId}
+        <if test="conversationId != null">
+            AND conversation_id = #{conversationId}
+        </if>
+    </select>
+
+
+</mapper>
