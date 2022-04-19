@@ -42,4 +42,11 @@
         FROM discuss_post
         WHERE id = #{postId}
     </select>
+
+    <!--int updateCommentCountById(int postId, int commentCount);-->
+    <update id="updateCommentCountById">
+        UPDATE discuss_post
+        SET comment_count = #{commentCount}
+        WHERE id = #{postId};
+    </update>
 </mapper>

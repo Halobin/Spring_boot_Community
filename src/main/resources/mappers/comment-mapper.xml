@@ -21,4 +21,10 @@
         WHERE entity_id = #{entityId}
         AND entity_type = #{entityType}
     </select>
+
+    <!--int insertComment(Comment comment);-->
+    <insert id="insertComment" parameterType="Comment">
+        INSERT INTO comment (user_id, entity_type, entity_id, target_id, content, status, create_time)
+        VALUES (#{userId}, #{entityType}, #{entityId}, #{targetId}, #{content}, #{status}, #{createTime})
+    </insert>
 </mapper>
