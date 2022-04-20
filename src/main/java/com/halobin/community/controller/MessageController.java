@@ -6,6 +6,7 @@ import com.halobin.community.entity.Page;
 import com.halobin.community.entity.User;
 import com.halobin.community.service.MessageService;
 import com.halobin.community.service.UserService;
+import com.halobin.community.util.CommunityUtil;
 import com.halobin.community.util.HostHolder;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class MessageController {
@@ -96,6 +96,29 @@ public class MessageController {
         }else{
             return userService.findUserById(id0);
         }
+    }
 
+    @LoginRequired
+    @PostMapping("/letter/send")
+    @ResponseBody
+    public String sendLetter(String targetName, String content){
+        User target = userService.findUserByUsername(targetName);
+        if(target == null){
+            return CommunityUtil.getJSONString(1,"目标用户不存在！");
+        }
+
+        Message letter = new Message();
+        letter.setFromId(hostHolder.getUser().getId());
+        letter.setToId(target.getId());
+        if(letter.getFromId() < letter.getToId()){
+            letter.setConversationId(letter.getFromId() + "_" + letter.getToId());
+        }else{
+            letter.setConversationId(letter.getToId() + "_" + letter.getFromId());
+        }
+        letter.setContent(content);
+        letter.setCreateTime(new Date());
+        messageService.addMessage(letter);
+
+        return CommunityUtil.getJSONString(0);
     }
 }
