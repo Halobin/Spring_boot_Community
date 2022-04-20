@@ -83,6 +83,11 @@ public class MessageController {
         model.addAttribute("letters",letters);
         model.addAttribute("target",getLettersTarget(conversationId));
 
+        List<Integer> unreadLetterIds = getUnreadLetterIds(letterList);
+        if(!unreadLetterIds.isEmpty()){
+            messageService.readMessage(unreadLetterIds, 1);
+        }
+
         return "/site/letter-detail";
     }
 
@@ -96,6 +101,20 @@ public class MessageController {
         }else{
             return userService.findUserById(id0);
         }
+    }
+
+    public List<Integer> getUnreadLetterIds(List<Message> letterList){
+        List<Integer> ids = new ArrayList<>();
+
+        if(letterList != null){
+            for(Message letter : letterList){
+                if(letter.getToId() == hostHolder.getUser().getId() && letter.getStatus() == 0){
+                    ids.add(letter.getId());
+                }
+            }
+        }
+
+        return ids;
     }
 
     @LoginRequired
