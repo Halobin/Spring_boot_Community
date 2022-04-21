@@ -5,7 +5,9 @@ import com.halobin.community.entity.DiscussPost;
 import com.halobin.community.entity.Page;
 import com.halobin.community.entity.User;
 import com.halobin.community.service.DiscussPostService;
+import com.halobin.community.service.LikeService;
 import com.halobin.community.service.UserService;
+import com.halobin.community.util.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +20,16 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class MainPageController {
+public class MainPageController implements CommunityConstant {
 
     @Autowired
     private UserService userService;
 
     @Autowired
     private DiscussPostService discussPostService;
+
+    @Autowired
+    private LikeService likeService;
 
     @RequestMapping("/index")
     public String getIndexPage(Model model, Page page){
@@ -39,6 +44,8 @@ public class MainPageController {
             User user = userService.findUserById(discussPost.getUserId());
             map.put("user", user);
             discussPostsMap.add(map);
+            long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, discussPost.getId());
+            map.put("likeCount", likeCount);
         }
         model.addAttribute("discussPostsMap", discussPostsMap);
         return "/index";

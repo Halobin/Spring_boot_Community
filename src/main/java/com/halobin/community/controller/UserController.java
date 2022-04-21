@@ -2,6 +2,7 @@ package com.halobin.community.controller;
 
 import com.halobin.community.annotation.LoginRequired;
 import com.halobin.community.entity.User;
+import com.halobin.community.service.LikeService;
 import com.halobin.community.service.UserService;
 import com.halobin.community.util.CommunityUtil;
 import com.halobin.community.util.CookieUtil;
@@ -43,6 +44,9 @@ public class UserController {
 
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private LikeService likeService;
 
     @LoginRequired
     @GetMapping("/setting")
@@ -127,5 +131,21 @@ public class UserController {
         String ticket = CookieUtil.getValue(request, "ticket");
         userService.updateLoginTicketStatusByTicket(ticket, 1);
         return "redirect:/index";
+    }
+
+    @GetMapping("/profile/{userId}")
+    public String getProfilePage(@PathVariable("userId") int userId, Model model){
+        User user = userService.findUserById(userId);
+        if(user == null){
+            throw new RuntimeException("用户不存在");
+        }
+
+        // 用户
+        model.addAttribute("user",user);
+        // 点赞数量
+        long likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount",likeCount);
+
+        return "/site/profile";
     }
 }
