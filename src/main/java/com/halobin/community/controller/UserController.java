@@ -2,8 +2,10 @@ package com.halobin.community.controller;
 
 import com.halobin.community.annotation.LoginRequired;
 import com.halobin.community.entity.User;
+import com.halobin.community.service.FollowService;
 import com.halobin.community.service.LikeService;
 import com.halobin.community.service.UserService;
+import com.halobin.community.util.CommunityConstant;
 import com.halobin.community.util.CommunityUtil;
 import com.halobin.community.util.CookieUtil;
 import com.halobin.community.util.HostHolder;
@@ -28,7 +30,7 @@ import java.io.OutputStream;
 
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements CommunityConstant {
 
     @Value("${community.path.domain}")
     private String domain;
@@ -47,6 +49,9 @@ public class UserController {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private FollowService followService;
 
     @LoginRequired
     @GetMapping("/setting")
@@ -145,6 +150,18 @@ public class UserController {
         // 点赞数量
         long likeCount = likeService.findUserLikeCount(userId);
         model.addAttribute("likeCount",likeCount);
+        // 关注数量
+        long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followeeCount", followeeCount);
+        //粉丝数量
+        long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
+        model.addAttribute("followerCount", followerCount);
+        //是否关注
+        boolean hasFollowed = false;
+        if(hostHolder.getUser() != null){
+            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
+        }
+        model.addAttribute("hasFollowed", hasFollowed);
 
         return "/site/profile";
     }
