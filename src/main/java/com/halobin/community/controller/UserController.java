@@ -134,7 +134,8 @@ public class UserController implements CommunityConstant {
         newPassword = CommunityUtil.md5(newPassword + user.getSalt());
         userService.updatePasswordById(user.getId(), newPassword);
         String ticket = CookieUtil.getValue(request, "ticket");
-        userService.updateLoginTicketStatusByTicket(ticket, 1);
+        userService.userLogout(ticket);
+//        userService.updateLoginTicketStatusByTicket(ticket, 1);
         return "redirect:/index";
     }
 
