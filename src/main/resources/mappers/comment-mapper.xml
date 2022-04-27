@@ -27,4 +27,11 @@
         INSERT INTO comment (user_id, entity_type, entity_id, target_id, content, status, create_time)
         VALUES (#{userId}, #{entityType}, #{entityId}, #{targetId}, #{content}, #{status}, #{createTime})
     </insert>
+
+    <!--Comment selectCommentById(int id);-->
+    <select id="selectCommentById" resultType="Comment">
+        SELECT *
+        FROM comment
+        WHERE id = #{id}
+    </select>
 </mapper>
