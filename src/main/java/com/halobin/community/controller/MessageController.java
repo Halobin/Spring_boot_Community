@@ -1,11 +1,13 @@
 package com.halobin.community.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.halobin.community.annotation.LoginRequired;
 import com.halobin.community.entity.Message;
 import com.halobin.community.entity.Page;
 import com.halobin.community.entity.User;
 import com.halobin.community.service.MessageService;
 import com.halobin.community.service.UserService;
+import com.halobin.community.util.CommunityConstant;
 import com.halobin.community.util.CommunityUtil;
 import com.halobin.community.util.HostHolder;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -16,11 +18,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.*;
 
 @Controller
-public class MessageController {
+public class MessageController implements CommunityConstant {
 
     @Autowired
     private HostHolder hostHolder;
@@ -58,6 +61,7 @@ public class MessageController {
         }
         model.addAttribute("conversations",conversations);
         model.addAttribute("unreadletterCount", messageService.findLetterUnreadCount(user.getId(), null));
+        model.addAttribute("unreadnoticeCount", messageService.findUnreadNoticeCount(user.getId(), null));
         return "/site/letter";
     }
 
@@ -139,5 +143,77 @@ public class MessageController {
         messageService.addMessage(letter);
 
         return CommunityUtil.getJSONString(0);
+    }
+
+    @LoginRequired
+    @GetMapping("/notice/list")
+    public String getNoticeList(Model model){
+        User user = hostHolder.getUser();
+
+        // 查询评论类通知
+        Message message = messageService.findLatestNotice(user.getId(), TOPIC_COMMENT);
+        if(message != null){
+            Map<String, Object> messageVo = new HashMap<>();
+            messageVo.put("message", message);
+            String content = HtmlUtils.htmlUnescape(message.getContent());
+            Map<String, Object> data = JSONObject.parseObject(content, HashMap.class);
+            messageVo.put("user", userService.findUserById((Integer) data.get("userId")));
+            messageVo.put("entityType", data.get("entityType"));
+            messageVo.put("entityId", data.get("entityId"));
+            messageVo.put("postId", data.get("postId"));
+
+            int count = messageService.findNoticeCount(user.getId(), TOPIC_COMMENT);
+            messageVo.put("count", count);
+
+            int unreadCount = messageService.findUnreadNoticeCount(user.getId(), TOPIC_COMMENT);
+            messageVo.put("unreadCount", unreadCount);
+
+            model.addAttribute("commentNotice", messageVo);
+        }
+        // 查询点赞类通知
+        message = messageService.findLatestNotice(user.getId(), TOPIC_LIKE);
+        if(message != null){
+            Map<String, Object> messageVo = new HashMap<>();
+            messageVo.put("message", message);
+            String content = HtmlUtils.htmlUnescape(message.getContent());
+            Map<String, Object> data = JSONObject.parseObject(content, HashMap.class);
+            messageVo.put("user", userService.findUserById((Integer) data.get("userId")));
+            messageVo.put("entityType", data.get("entityType"));
+            messageVo.put("entityId", data.get("entityId"));
+            messageVo.put("postId", data.get("postId"));
+
+            int count = messageService.findNoticeCount(user.getId(), TOPIC_LIKE);
+            messageVo.put("count", count);
+
+            int unreadCount = messageService.findUnreadNoticeCount(user.getId(), TOPIC_LIKE);
+            messageVo.put("unreadCount", unreadCount);
+
+            model.addAttribute("likeNotice", messageVo);
+        }
+        // 查询关注类通知
+        message = messageService.findLatestNotice(user.getId(), TOPIC_FOLLOW);
+        if(message != null){
+            Map<String, Object> messageVo = new HashMap<>();
+            messageVo.put("message", message);
+            String content = HtmlUtils.htmlUnescape(message.getContent());
+            Map<String, Object> data = JSONObject.parseObject(content, HashMap.class);
+            messageVo.put("user", userService.findUserById((Integer) data.get("userId")));
+            messageVo.put("entityType", data.get("entityType"));
+            messageVo.put("entityId", data.get("entityId"));
+
+            int count = messageService.findNoticeCount(user.getId(), TOPIC_FOLLOW);
+            messageVo.put("count", count);
+
+            int unreadCount = messageService.findUnreadNoticeCount(user.getId(), TOPIC_FOLLOW);
+            messageVo.put("unreadCount", unreadCount);
+
+            model.addAttribute("followNotice", messageVo);
+        }
+        //查询未读信息数量
+        int unreadLetterCount = messageService.findLetterUnreadCount(user.getId(), null);
+        model.addAttribute("unreadletterCount", unreadLetterCount);
+        int unreadNoticeCount = messageService.findUnreadNoticeCount(user.getId(), null);
+        model.addAttribute("unreadnoticeCount", unreadNoticeCount);
+        return "/site/notice";
     }
 }

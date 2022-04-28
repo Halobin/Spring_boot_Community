@@ -48,4 +48,16 @@ public class MessageService {
     public int readMessage(List<Integer> ids, int status){
         return messageMapper.updateLetterStatus(ids, status);
     }
+
+    public Message findLatestNotice(int userId, String topic){
+        return messageMapper.selectLatestNotice(userId, topic);
+    }
+
+    public int findNoticeCount(int userId, String topic){
+        return messageMapper.selectNoticeCount(userId, topic);
+    }
+
+    public int findUnreadNoticeCount(int userId, String topic){
+        return messageMapper.selectUnreadNoticeCount(userId, topic);
+    }
 }

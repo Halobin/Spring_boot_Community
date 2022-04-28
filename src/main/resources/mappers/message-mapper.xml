@@ -81,4 +81,39 @@
             #{id}
         </foreach>
     </update>
+
+    <!--Message selectLatestNotice(int userId, String topic);-->
+    <select id="selectLatestNotice" resultType="Message">
+        SELECT *
+        FROM message
+        WHERE id in (
+            SELECT max(id) FROM message
+            WHERE status != 2
+            AND from_id = 1
+            AND to_id = #{userId}
+            AND conversation_id = #{topic}
+        )
+    </select>
+
+    <!--int selectNoticeCount(int userId, String topic);-->
+    <select id="selectNoticeCount" resultType="int">
+        SELECT count(id)
+        FROM message
+        WHERE status != 2
+        AND from_id = 1
+        AND to_id = #{userId}
+        AND conversation_id = #{topic}
+    </select>
+
+    <!--int selectUnreadNoticeCount(int userId, String topic);-->
+    <select id="selectUnreadNoticeCount" resultType="int">
+        SELECT count(id)
+        FROM message
+        WHERE status = 0
+        AND from_id = 1
+        AND to_id = #{userId}
+        <if test="topic != null">
+            AND conversation_id = #{topic}
+        </if>
+    </select>
 </mapper>
