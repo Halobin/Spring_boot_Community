@@ -116,4 +116,16 @@
             AND conversation_id = #{topic}
         </if>
     </select>
+
+    <!--List<Message> selectNotices(int userId, String topic, int offset, int limit);-->
+    <select id="selectNotices" resultType="Message">
+        SELECT *
+        FROM message
+        WHERE status != 2
+        AND from_id = 1
+        AND to_id = #{userId}
+        AND conversation_id = #{topic}
+        ORDER BY id desc
+        LIMIT #{offset}, #{limit};
+    </select>
 </mapper>
